@@ -9,12 +9,17 @@
 
 const localAdapter = {
   async get(key, shared = false) {
-    const raw = localStorage.getItem(`${shared ? "shared" : "personal"}:${key}`);
+    const raw = localStorage.getItem(
+      `${shared ? "shared" : "personal"}:${key}`
+    );
     if (raw === null) throw new Error("not found");
     return { key, value: raw, shared: !!shared };
   },
   async set(key, value, shared = false) {
-    localStorage.setItem(`${shared ? "shared" : "personal"}:${key}`, value);
+    localStorage.setItem(
+      `${shared ? "shared" : "personal"}:${key}`,
+      value
+    );
     return { key, value, shared: !!shared };
   },
   async delete(key, shared = false) {
@@ -35,9 +40,12 @@ const localAdapter = {
 const baseUrl = process.env.STORAGE_API_BASE || "https://api.example.com";
 const fetchAdapter = {
   async get(key, shared = false) {
-    const res = await fetch(`${baseUrl}/storage/get?key=${encodeURIComponent(key)}&shared=${shared}`, {
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${baseUrl}/storage/get?key=${encodeURIComponent(key)}&shared=${shared}`,
+      {
+        credentials: "include",
+      }
+    );
     if (!res.ok) throw new Error("not found");
     return res.json();
   },
@@ -62,9 +70,12 @@ const fetchAdapter = {
     return res.json();
   },
   async list(prefix = "", shared = false) {
-    const res = await fetch(`${baseUrl}/storage/list?prefix=${encodeURIComponent(prefix)}&shared=${shared}`, {
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${baseUrl}/storage/list?prefix=${encodeURIComponent(prefix)}&shared=${shared}`,
+      {
+        credentials: "include",
+      }
+    );
     if (!res.ok) throw new Error("list failed");
     return res.json();
   },
