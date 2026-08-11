@@ -3,15 +3,21 @@
 // Default implementation: simulated network that resolves successfully after a short delay.
 // Replace or augment with a real payment gateway integration for production.
 
-async function delay(ms) { return new Promise((r) => setTimeout(r, ms)); }
+async function delay(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
 
 const simulatedAdapter = {
   async sendWithdrawal({ id, asset, amount, recipient, method }) {
     // Simulate network latency and success/failure.
     await delay(1000 + Math.random() * 800);
     // For demo, fail if amount is absurdly large (>100000) to show errors.
-    if (amount > 100000) return { success: false, message: "Amount too large", txId: null };
-    const txId = `${asset.toLowerCase()}_tx_${Math.floor(Math.random() * 1e9)}_${Date.now()}`;
+    if (amount > 100000) {
+      return { success: false, message: "Amount too large", txId: null };
+    }
+    const txId = `${asset.toLowerCase()}_tx_${Math.floor(
+      Math.random() * 1e9
+    )}_${Date.now()}`;
     return { success: true, message: "Withdrawal queued", txId };
   },
 };
